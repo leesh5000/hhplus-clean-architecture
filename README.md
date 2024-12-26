@@ -29,40 +29,53 @@ erDiagram
     LECTURE ||--o{ REGISTRATION : "1:N"
 
     USER {
-        bigint user_id PK
+        bigint id PK
         varchar user_name
-        varchar email
-        datetime created_at
-        datetime updated_at
     }
 
     LECTURE {
-        bigint lecture_id PK
+        bigint id PK
         varchar lecture_name
         varchar speaker
         date   lecture_date
         int    current_applicants
         int    capacity
-        datetime created_at
-        datetime updated_at
     }
-
+    
     REGISTRATION {
         bigint registration_id PK
         bigint user_id FK
         bigint lecture_id FK
-        datetime created_at
     }
 ```
 
 ```mermaid
 classDiagram
-    class ClassName {
-        + PublicAttribute: Type
-        - PrivateAttribute: Type
-        # ProtectedAttribute: Type
-        + PublicMethod(param: Type): ReturnType
-        - PrivateMethod(param: Type): ReturnType
+    class User {
+        - id: Integer
+        + getRegisteredLectures(): Array<Lecture>
+    }
+
+    class Lecture {
+        - id: Integer
+        - name: String
+        - speaker: String
+        - lectureTime: Time
+        + isFull(): Boolean
+        + getStartDateTime(): DateTime
+        + getEndDateTime(): DateTime
+        + register(user: User): Registration
+    }
+
+    class Registration {
+        - id: Integer
+        - user_id: Integer
+        - lecture_id: Integer
     }
 
 ```
+
+## 궁금점
+
+1. 과제를 통해 달성하고자 하는 목표 (ex. 이번 과제의 경우 클린 아키텍처)에 집중하기 위해 요구사항을 최대한 단순하게 생각했습니다. 예를 들어, 실생활의 경우 하나의 특강이 여러 개의 강의 스케쥴을 가지는 것이 옳겠지만, 과제 핵심에 집중하기 위해 하나의 특강이 하나의 강의 시간만 가지도록 하였는데 앞으로 과제도 이런 식으로 해도 문제 없을까요?
+2. 
