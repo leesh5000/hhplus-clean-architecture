@@ -1,10 +1,10 @@
-package kr.co.aerix.lecture;
+package kr.co.aerix.hhplus;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LectureApplicationTests {
+class CourseApplicationTests {
 
     @Test
     void contextLoads() {
