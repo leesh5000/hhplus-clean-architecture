@@ -44,6 +44,25 @@ public class RegisterCourseServiceIntegrationTest {
         this.registerCourseService = registerCourseService;
     }
 
+    @DisplayName("30명 이후에 신청자는 특강 신청이 실패해야 한다.")
+    @Test
+    void register_course_test_1() {
+
+        // given : 30명의 유저가 강좌를 신청한다.
+        Long courseId = 1L;
+        LocalDate openingDate = LocalDate.of(2021, 8, 1);
+        for (int i = 1; i <= 30; i++) {
+            Long userId = (long) i;
+            RegisterCommand registerCommand = new RegisterCommand(userId, courseId, openingDate);
+            registerCourseService.registerCourse(registerCommand);
+        }
+
+        // when & then : 새로운 유저가 강좌를 신청하면, 예외가 발생해야 한다.
+        Long userId = 31L;
+        RegisterCommand registerCommand = new RegisterCommand(userId, courseId, openingDate);
+        assertThrows(IllegalArgumentException.class, () -> registerCourseService.registerCourse(registerCommand));
+    }
+
     @DisplayName("동시에 40명이 특강을 신청하면, 30명까지만 성공해야 한다.")
     @Test
     void open_course_test2() throws InterruptedException {
@@ -76,6 +95,30 @@ public class RegisterCourseServiceIntegrationTest {
         CourseSchedule courseSchedule = courseScheduleRepository.findById(courseId).orElse(null);
         int registeredCount = courseSchedule.getCurrentApplicants();
         assertEquals(30, registeredCount);
+    }
+
+    @DisplayName("한 명의 유저가 하나의 강좌를 5번 신청하면, 한 번만 신청이 되어야 한다.")
+    @Test
+    void open_course_test3() {
+
+        // given : /sql/register-course-test-data.sql 참고
+        Long courseId = 1L;
+        LocalDate openingDate = LocalDate.of(2021, 8, 1);
+
+        // when: 한 명의 유저가 하나의 강좌를 5번 신청하면,
+        Long userId = 1L;
+        RegisterCommand registerCommand = new RegisterCommand(userId, courseId, openingDate);
+        for (int i = 0; i < 5; i++) {
+            try {
+                registerCourseService.registerCourse(registerCommand);
+            } catch (RuntimeException e) {
+                // 테스트를 위해 예외를 무시한다.
+            }
+        }
+
+        // Then: 해당 UserID가 신청한 강좌 수는 1개여야 한다.
+        List<Registration> userRegistrations = registrationRepository.findAllByUserId(userId);
+        assertEquals(1, userRegistrations.size());
     }
 
 }
