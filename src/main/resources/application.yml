@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: course
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:13306/hhplus
+    username: 'hhplus'
+    password: 'hhplus'
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true

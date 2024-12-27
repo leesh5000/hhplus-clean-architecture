@@ -1,13 +1,13 @@
-package kr.co.aerix.lecture;
+package kr.co.aerix.hhplus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LectureApplication {
+public class CourseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(LectureApplication.class, args);
+        SpringApplication.run(CourseApplication.class, args);
     }
 
 }
